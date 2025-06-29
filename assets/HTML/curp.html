@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de CURP</title>
+</head>
+<body>
+    <header>
+        <h1><a href="../index.html">Generador de CURP</a></h1>
+        <p>Clave Única de Registro de Población</p>
+    </header>
+    <main>
+        <form id="curpForm">
+            <fieldset>
+                <legend>Datos personales</legend>
+
+                <h3>Nombre completo</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre(s)</label>
+                        <input required type="text" placeholder="Escribe tu nombre" id="nombre">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="paterno">Apellido paterno</label>
+                        <input required type="text" placeholder="Escribe tu apellido paterno" id="paterno">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="materno">Apellido materno</label>
+                        <input required type="text" placeholder="Escribe tu apellido materno" id="materno">
+                    </div>
+                </div>
+
+                <h3>Información personal</h3>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="sexo">Sexo</label>
+                        <select required id="sexo">
+                            <option value="" disabled selected>Selecciona</option>
+                            <option value="H">Hombre</option>
+                            <option value="M">Mujer</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group estados">
+                        <label for="entidad">Entidad federativa de nacimiento</label>
+                        <select required id="entidad">
+                            <option value="" disabled selected>Selecciona tu estado</option>
+                            <option value="AS">Aguascalientes</option>
+                            <option value="BC">Baja California</option>
+                            <option value="BS">Baja California Sur</option>
+                            <option value="CC">Campeche</option>
+                            <option value="CL">Coahuila</option>
+                            <option value="CM">Colima</option>
+                            <option value="CS">Chiapas</option>
+                            <option value="CH">Chihuahua</option>
+                            <option value="DF">Ciudad de México</option>
+                            <option value="DG">Durango</option>
+                            <option value="GT">Guanajuato</option>
+                            <option value="GR">Guerrero</option>
+                            <option value="HG">Hidalgo</option>
+                            <option value="JC">Jalisco</option>
+                            <option value="MC">Estado de México</option>
+                            <option value="MN">Michoacán</option>
+                            <option value="MS">Morelos</option>
+                            <option value="NT">Nayarit</option>
+                            <option value="NL">Nuevo León</option>
+                            <option value="OC">Oaxaca</option>
+                            <option value="PL">Puebla</option>
+                            <option value="QT">Querétaro</option>
+                            <option value="QR">Quintana Roo</option>
+                            <option value="SP">San Luis Potosí</option>
+                            <option value="SL">Sinaloa</option>
+                            <option value="SR">Sonora</option>
+                            <option value="TC">Tabasco</option>
+                            <option value="TS">Tamaulipas</option>
+                            <option value="TL">Tlaxcala</option>
+                            <option value="VZ">Veracruz</option>
+                            <option value="YN">Yucatán</option>
+                            <option value="ZS">Zacatecas</option>
+                            <option value="NE">Nacido en el Extranjero</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3>Fecha de nacimiento</h3>
+                <div class="date-group">
+                    <div class="form-group">
+                        <label for="dia">Día</label>
+                        <input type="number" min="1" max="31" required id="dia">
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="mes">Mes</label>
+                        <select required id="mes">
+                            <option value="" disabled selected>Selecciona</option>
+                            <option value="01">Enero</option>
+                            <option value="02">Febrero</option>
+                            <option value="03">Marzo</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Mayo</option>
+                            <option value="06">Junio</option>
+                            <option value="07">Julio</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="anio">Año</label>
+                        <input type="number" min="1900" max="2025" required id="anio">
+                    </div>
+                </div>
+                
+                <button type="button" id="calcular">Calcular CURP</button>
+            </fieldset>
+            
+            <div class="result-container">
+                <h3>Tu CURP es:</h3>
+                <textarea id="resultado" readonly></textarea>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const botonCalcular = document.getElementById('calcular');
+            
+            // Evitar que números negativos sean introducidos
+            const inputsNumericos = document.querySelectorAll('input[type="number"]');
+            inputsNumericos.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value < this.min) this.value = this.min;
+                    if (this.value > this.max) this.value = this.max;
+                });
+            });
+
+            // Función para eliminar acentos
+            function quitarAcentos(texto) {
+                return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");//Normaliza el texto a la forma NFD (Normalization Form Decomposition)
+                                                                              //Esto descompone caracteres acentuados (ej: "á") en sus partes básicas: "a"+"'"
+            }
+            // Función para encontrar la primera vocal interna
+            function primeraVocalInterna(texto) {
+                const vocales = 'AEIOU';
+                for (let i = 1; i < texto.length; i++) {
+                    if (vocales.includes(texto[i])) {
+                        return texto[i];
+                    }
+                }
+                return 'X';
+            }
+
+            // Función para encontrar la primera consonante interna
+            function primeraConsonanteInterna(texto) {
+                const consonantes = 'BCDFGHJKLMNPQRSTVWXYZ';
+                for (let i = 1; i < texto.length; i++) {
+                    if (consonantes.includes(texto[i])) {
+                        return texto[i];
+                    }
+                }
+                return 'X';
+            }
+
+            // Palabras inconvenientes para filtrar
+            const palabrasInconvenientes = [
+                'BACA', 'BAKA', 'BUEI', 'BUEY', 'CACA', 'CACO', 'CAGA', 'CAGO', 'CAKA', 'CAKO',
+                'COGE', 'COGI', 'COJA', 'COJE', 'COJI', 'COJO', 'COLA', 'CULO', 'FALO', 'FETO',
+                'GETA', 'GUEI', 'GUEY', 'JETA', 'JOTO', 'KACA', 'KACO', 'KAGA', 'KAGO', 'KAKA',
+                'KAKO', 'KOGE', 'KOGI', 'KOJA', 'KOJE', 'KOJI', 'KOJO', 'KOLA', 'KULO', 'LILO',
+                'LOCA', 'LOCO', 'LOKA', 'LOKO', 'MAME', 'MAMO', 'MEAR', 'MEAS', 'MEON', 'MIAR',
+                'MION', 'MOCO', 'MOKO', 'MULA', 'MULO', 'NACA', 'NACO', 'PEDA', 'PEDO', 'PENE',
+                'PIPI', 'PITO', 'POPO', 'PUTA', 'PUTO', 'QULO', 'RATA', 'ROBA', 'ROBE', 'ROBO',
+                'RUIN', 'SENO', 'TETA', 'VAGA', 'VAGO', 'VAKA', 'VUEI', 'VUEY', 'WUEI', 'WUEY'
+            ];
+
+            // Función para generar un dígito verificador
+            function digitoVerificador(curp) {
+                const diccionario = "0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+                let suma = 0;
+                for (let i = 0; i < 17; i++) {
+                    suma += diccionario.indexOf(curp[i]) * (18 - i);
+                }
+                const numVer = 10 - (suma % 10);
+                return numVer === 10 ? 0 : numVer;
+            }
+
+            // Evento click para calcular el CURP
+            botonCalcular.addEventListener('click', function() {
+                const nombre = document.getElementById('nombre').value.trim().toUpperCase();
+                const paterno = document.getElementById('paterno').value.trim().toUpperCase();
+                const materno = document.getElementById('materno').value.trim().toUpperCase();
+                const sexo = document.getElementById('sexo').value;
+                const entidad = document.getElementById('entidad').value;
+                const dia = document.getElementById('dia').value.padStart(2, '0');
+                const mes = document.getElementById('mes').value;
+                const anio = document.getElementById('anio').value;
+                const resultado = document.getElementById('resultado');
+                
+                // Validar que todos los campos estén completos
+                if (!nombre || !paterno || !materno || !sexo || !entidad || !dia || !mes || !anio) {
+                    resultado.value = "Completa todos los campos";
+                    return;
+                }
+
+                // Preparar apellidos y nombre sin acentos
+                const paternoLimpio = quitarAcentos(paterno);
+                const maternoLimpio = quitarAcentos(materno);
+                const nombreLimpio = quitarAcentos(nombre);
+
+                // 1. Primera letra y primera vocal interna del apellido paterno
+                let curp = paternoLimpio.charAt(0) + primeraVocalInterna(paternoLimpio);
+                
+                // 2. Primera letra del apellido materno
+                curp += maternoLimpio.charAt(0) || 'X';
+                
+                // 3. Primera letra del nombre
+                // Si el nombre comienza con José o María, tomar la primera letra del segundo nombre
+                const nombreSplit = nombreLimpio.split(' ');
+                if ((nombreSplit[0] === 'JOSE' || nombreSplit[0] === 'MARIA') && nombreSplit.length > 1) {
+                    curp += nombreSplit[1].charAt(0);
+                } else {
+                    curp += nombreSplit[0].charAt(0);
+                }
+
+                // Comprobar palabras inconvenientes y reemplazar
+                if (palabrasInconvenientes.includes(curp)) {
+                    curp = curp.substring(0, 1) + 'X' + curp.substring(2);
+                }
+
+                // 4. Fecha de nacimiento: Últimos dos dígitos del año, mes y día
+                curp += anio.substring(2) + mes + dia;
+                
+                // 5. Sexo: H para hombre, M para mujer
+                curp += sexo;
+                
+                // 6. Entidad federativa
+                curp += entidad;
+                
+                // 7. Primera consonante interna del apellido paterno
+                curp += primeraConsonanteInterna(paternoLimpio);
+                
+                // 8. Primera consonante interna del apellido materno
+                curp += primeraConsonanteInterna(maternoLimpio);
+                
+                // 9. Primera consonante interna del nombre
+                curp += primeraConsonanteInterna(nombreLimpio);
+                
+                // 10. Para fechas de nacimiento <= 1999, se asigna "0", si es >= 2000, se asigna "A"
+                if (parseInt(anio) <= 1999) {
+                    curp += "0";
+                } else {
+                    curp += "A";
+                }
+                
+                // 11. Dígito verificador
+                curp += digitoVerificador(curp);
+                
+                // Mostrar el resultado
+                resultado.value = curp;
+            });
+        });
+    </script>
+</body>
+</html>

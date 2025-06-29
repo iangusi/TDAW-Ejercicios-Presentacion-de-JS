@@ -1,0 +1,165 @@
+#slider {
+	position: relative;
+    width: 100%;
+    height: 100vh;
+	min-height: 400px;
+	overflow: hidden;
+}
+
+.s {
+	position: absolute;
+	width: 100%;
+    height: 100vh;
+	min-height: 400px;
+	overflow: hidden;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.s a{
+	color: #fff;
+	font-size: 4rem;
+	text-shadow: 0px 0px 10px black;
+	font-family: "Arvo", serif;
+}
+
+.s:nth-child(1) {
+	background-color: #7ef9e9;
+}
+.s:nth-child(2)  {
+	background-color: #58f3d3;
+}
+.s:nth-child(3) {
+	background-color: #31edbc;
+}
+.s:nth-child(4) {
+	background-color: #0be7a6;
+}
+.s:nth-child(5) {
+	background-color: #0ad0ab;
+}
+
+
+.s_left::before, .s_right::before {
+	color: white;
+	background: rgba(114, 96, 96, 0.2);
+	position: absolute;
+	height: 200px;
+	width: 40px;
+	top: 50%;
+	transform: translate3d(0, -50%, 0);
+	cursor: pointer;
+	border: none;
+	font-size: 3rem;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: .6s all;
+}
+.s_right::before {
+	content: "\276D";
+	right: 0;
+	border-top-left-radius: 50%;
+	border-bottom-left-radius: 50%;
+}
+.s_left::before {
+	content: "\276C";
+	left: 0;
+	border-top-right-radius: 50%;
+	border-bottom-right-radius: 50%;
+}
+.s_right:active::before, .s_left:active::before {
+	background: #fff0
+}
+
+
+
+.secciones{
+    width: 100%;
+    height: 100vh;
+	min-height: 400px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.secciones > p {
+    text-align: center;
+    margin: 0 0 40px;
+	color: #fff;
+	font-size: 3rem;
+	text-shadow: 0px 0px 10px black;
+	font-family: "Arvo", serif;
+}
+
+#tabla12 {
+	background-color: #a5faef;
+}
+
+#ejercicio43{
+	background-color: #7ef9e9;
+}
+
+#ejercicio48{
+	background-color: #58f3d3;
+}
+
+
+.ficha {
+	width: 600px;
+	height: 250px;
+	display: flex;
+	border-radius: 20px;
+	padding: 10px;
+}
+.ficha .texto {
+	width: 340px;
+	height: 100%;
+	text-align: justify;
+	display: flex;
+	align-items: center;
+}
+.ficha:hover > p {
+	width: 0;
+}
+.ficha:hover > div {
+	width: 100%;
+}
+
+
+table {
+	border: 2px solid black;
+	text-align: center;
+	overflow: hidden;
+}
+table:nth-child(1) {
+	width: 100%;
+}
+table:nth-child(2) {
+	width: 0;
+}
+td, th {
+	border: 1px solid black;
+}
+table:nth-child(1) td, table:nth-child(1) th {
+	font-size: 1rem;
+}
+table:nth-child(2) td, table:nth-child(2) th {
+	font-size: 0;
+}
+
+.ficha:hover > table:nth-child(1) {
+	width: 0;
+}
+.ficha:hover > table:nth-child(2) {
+	width: 100%;
+}
+.ficha:hover  table:nth-child(1) td, .ficha:hover table:nth-child(1) th  {
+	font-size: 0;
+}
+.ficha:hover  table:nth-child(2) td, .ficha:hover table:nth-child(2) th  {
+	font-size: 1rem;
+}

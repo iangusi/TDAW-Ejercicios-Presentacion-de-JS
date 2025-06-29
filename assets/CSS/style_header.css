@@ -1,0 +1,75 @@
+h1 {
+	padding: 20px 20px 0;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+*{
+	box-sizing: border-box;
+	font-family: "Arvo", serif;
+	text-decoration: none;
+	transition: .6s all;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+}
+
+header {
+	position: absolute;
+	z-index: 2;
+	width: 100%;
+	height: 60px;
+	display: flex;
+	justify-content: right;
+	align-items: center;
+	padding: 20px 20px 0;
+}
+
+.header {
+	display: flex;
+	justify-content: right;
+	align-items: center;
+}
+
+#tema{
+	width: 50px;
+	height: 50px;
+	padding: 0 25px 0;
+	border-radius: 25px;
+	background: #FFF url(../IMG/menu.png);
+    background-size: 50px;
+    background-repeat: no-repeat;
+    background-position: center;
+	position: absolute;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#tema a{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 35px;
+	background-color: #fff;
+	color: #000;
+	margin: 0 5px 0;
+	border-radius: 20px;
+	flex: 1;
+	overflow: hidden;
+}
+
+#tema:hover {
+	width: 350px;
+	padding: 0 5px 0;
+}
+#tema a:hover {
+	background-color: #0be7a6;
+}
